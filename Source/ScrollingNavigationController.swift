@@ -18,7 +18,7 @@ import UIKit
  - Scrolling: the navigation bar is transitioning to either `Collapsed` or `Scrolling`
  */
 @objc public enum NavigationBarState: Int {
-    case Collapsed, Expanded, Scrolling
+    case Collapsing, Collapsed, Expanding, Expanded, Scrolling
 }
 
 /**
@@ -101,7 +101,7 @@ public class ScrollingNavigationController: UINavigationController, UIGestureRec
         guard let _ = self.scrollableView, visibleViewController = self.visibleViewController else { return }
 
         if state == .Expanded {
-            self.state = .Scrolling
+            self.state = .Collapsing
             UIView.animateWithDuration(animated ? 0.1 : 0, animations: { () -> Void in
                 self.scrollWithDelta(self.fullNavbarHeight)
                 visibleViewController.view.setNeedsLayout()
@@ -127,7 +127,7 @@ public class ScrollingNavigationController: UINavigationController, UIGestureRec
 
         if state == .Collapsed {
             gestureRecognizer?.enabled = false
-            self.state = .Scrolling
+            self.state = .Expanding
             UIView.animateWithDuration(animated ? 0.1 : 0, animations: {
                 self.lastContentOffset = 0;
                 self.delayDistance = -self.fullNavbarHeight
